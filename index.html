@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>EquPlayer</title>
+    <!-- <link rel="stylesheet" href="https://unpkg.com/@bafs/mu@0.3"/> -->
+    <style>
+html {
+    font-family: sans-serif;
+    margin: 0 2rem;
+}
+body {
+    max-width: 1200px;
+}
+button {
+    float: right;
+    font-size: 1rem;
+    padding: 1rem 5rem;
+    background: #eee;
+    border: 2px solid #555;
+}
+button:hover {
+    background: #ddd;
+}
+canvas {
+    border: 1px solid #aaa;
+    display: block;
+    margin: auto;
+}
+label {
+    font-size: 20px;
+}
+input {
+    font-size: 22px;
+    width: 70px;
+}
+#container {
+    border-top: 1px solid #bbb;
+    border-bottom: 1px solid #bbb;
+}
+#buffers {
+    background: #f8f8f8;
+    display: flex;
+    /* justify-content: space-between; */
+    /* align-content: space-between; */
+    flex-flow: row wrap;
+}
+.buffer-play {
+    width: 280px;
+    background: #f2f2f2;
+    border: solid 1px #ddd;
+    padding: .5rem;
+    display: inline-block;
+}
+#buffers code {
+    color: #623;
+    letter-spacing: -1px;
+    word-spacing: -2px;
+    height: 30px;
+    display: block;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+@keyframes flash-animation {
+    from {
+        border-color: red;
+    }
+    to {
+        border-color: yellow;
+    }
+}
+@keyframes loader-animation {
+    from {
+        background: #333;
+        width: 0%;
+    }
+    to {
+        background: #333;
+        width: 100%;
+    }
+}
+.played-animation {
+    animation: flash-animation 1s 1; 
+}
+.loader {
+    background: rgba(0, 0, 0, .1);
+    display: block;
+    height: 5px;
+    width: 100%;
+    /* border-left: 1px solid #333; */
+    /* border-right: 1px solid #333; */
+    opacity: 0.5;
+}
+.played-animation .loader {
+    animation: loader-animation 1s linear; 
+}
+    </style>
+</head>
+<body>
+<canvas id="graph" height="380" width="800"></canvas>
+<br>
+<button id="load">Plot & Play</button>
+<label>Period (plot):</label> <input name="period" type="number" min="0" max="2000" value="25"> ms<br>
+<label>Duration:</label> <input name="duration" type="number" min="0" value="2000"> ms<br>
+<div id="buffers"></div>
+<br>
+<!-- <button id="play">Play</button> -->
+<!-- <button id="stop">Stop</button> -->
+
+<div id="container" style="width:100%;height:160px"></div>
+
+<script src="loader.js"></script>
+<!-- <script src="https://unpkg.com/monaco-editor/min/vs/loader.js"></script> -->
+<script src="audio.js"></script>
+<script>
+const buffers = [];
+
+const miniPlot = (buffer) => {
+    const canvasEl = document.createElement('canvas');
+    canvasEl.width = 270
+    canvasEl.height = 100
+    // const ctx = canvasEl.getContext('2d');
+
+    return plot(buffer.getChannelData(0), canvasEl);
+}
+
+const playBufferN = (n) => {
+    const btn = document.querySelector(`[data-number="${n}"]`);
+    btn.classList.remove('played-animation');
+    void btn.offsetWidth;
+    btn.classList.add('played-animation');
+    playBuffer(buffers[n].buffer);
+}
+
+/**
+ * @param {AudioBuffer} Buffer
+ */
+const addBuffer = (buffer, input) => {
+    buffers.push({ buffer, input });
+
+    const lines = input.trim().split("\n");
+    const last = lines.pop();
+
+    const el = document.createElement('div');
+    const n = buffers.length - 1;
+    el.addEventListener('click', () => {
+        playBufferN(n);
+    });
+    el.classList.add('buffer-play')
+    el.setAttribute('data-number', n)
+    el.innerHTML = `
+    <span>Buffer #${buffers.length}</span><br>
+    <span class="loader"></span>
+    <code>${last}</code>`;
+
+    const canvasEl = miniPlot(buffer);
+    el.append(canvasEl);
+
+    document.querySelector('#buffers').append(el);
+}
+
+const render = editor => {
+    const ms = document.querySelector('[name="period"]').value;
+    const duration = document.querySelector('[name="duration"]').value;
+    buffer = run(editor.getValue(), ms, duration);
+
+    addBuffer(buffer, editor.getValue());
+}
+
+require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor/min/vs' }});
+require(['vs/editor/editor.main'], function() {
+    const editor = monaco.editor.create(document.getElementById('container'), {
+        value: [
+            // 'function sum(fn, [min, max]) {',
+            // '    let sum = 0;',
+            // '    for (let i = min; i <= max; ++i) {',
+            // '        sum += fn(i);',
+            // '    }',
+            // '    return sum;',
+            // '}',
+            'const sum = (fn, [min, max]) => Array(max - min + 1).fill().reduce((sum, _, i) => sum + fn(i + min), 0)',
+            '',
+            'Math.sin(440 * Math.log10(t) * Math.PI * 2)',
+            'Math.sin(440 * t * Math.PI * 2)',
+            'sum(s => Math.sin(440 * t * Math.PI * 2 * s) / 2, [1, 3])',
+        ].join('\n'),
+        language: 'javascript',
+        lineNumbers: "off",
+        minimap: {
+            enabled: false
+        },
+        roundedSelection: false,
+        scrollBeyondLastLine: false,
+        // theme: "vs-dark",
+    });
+    document.getElementById('load').addEventListener('click', () => {
+        render(editor);
+    });
+    render(editor);
+    // run(editor.getValue(), 1000);
+
+    document.addEventListener('keydown', ({ keyCode }) => {
+        const n = keyCode - 48;
+        if (!editor.hasTextFocus() && n > 0 && n < 10 && buffers[n-1]) {
+            playBufferN(n - 1);
+        }
+    });
+});
+</script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.9.0/math.min.js"></script> -->
+</body>
+</html>
