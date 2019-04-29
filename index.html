@@ -105,12 +105,10 @@ input {
 <canvas id="graph" height="380" width="800"></canvas>
 <br>
 <button id="load">Plot & Play</button>
-<label>Period (plot):</label> <input name="period" type="number" min="0" max="2000" value="25"> ms<br>
+<label>Period (plot):</label> <input name="period" type="number" min="0" max="2000" value="50"> ms<br>
 <label>Duration:</label> <input name="duration" type="number" min="0" value="2000"> ms<br>
 <div id="buffers"></div>
 <br>
-<!-- <button id="play">Play</button> -->
-<!-- <button id="stop">Stop</button> -->
 
 <div id="container" style="width:100%;height:160px"></div>
 
@@ -122,8 +120,8 @@ const buffers = [];
 
 const miniPlot = (buffer) => {
     const canvasEl = document.createElement('canvas');
-    canvasEl.width = 270
-    canvasEl.height = 100
+    canvasEl.width = 270;
+    canvasEl.height = 100;
     // const ctx = canvasEl.getContext('2d');
 
     return plot(buffer.getChannelData(0), canvasEl);
@@ -190,7 +188,7 @@ require(['vs/editor/editor.main'], function() {
             'sum(s => Math.sin(440 * t * Math.PI * 2 * s) / 2, [1, 3])',
         ].join('\n'),
         language: 'javascript',
-        lineNumbers: "off",
+        lineNumbers: 'off',
         minimap: {
             enabled: false
         },

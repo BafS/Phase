@@ -1,0 +1,23 @@
+{
+  "name": "equa",
+  "version": "0.1.0",
+  "description": "Equations player",
+  "main": "audio.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BafS/Equations-Player.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BafS/Equations-Player/issues"
+  },
+  "homepage": "https://github.com/BafS/Equations-Player#readme",
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.2"
+  }
+}
