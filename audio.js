@@ -1,71 +1,24 @@
-const canvas = document.getElementById('graph');
-// ctx.imageSmoothingEnabled = false;
-
 /**
- * @param {Float32Array} points
+ * @param {AudioBuffer} buffer
+ * @param {number} duration in ms
  */
-const plot = (points, canvas) => {
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.strokeStyle = "#5a83b2";
-  ctx.fillStyle = "rgba(0, 0, 0, .1)";
-  ctx.fillRect(0, canvas.height / 2, canvas.width, 1); // x line
-  ctx.beginPath();
-  ctx.lineWidth = 1.5;
-  const ratioX = (canvas.width + 1) / points.length;
-  const ratioY = -canvas.height / 2;
-  let previous = null;
-  const extrema = [Infinity, -Infinity];
-  points.forEach((y, x) => {
-    y -= 1;
+function playBuffer(buffer, duration = 1000) {
+  const audioCtx = new AudioContext();
+  // Get an AudioBufferSourceNode.
+  // This is the AudioNode to use when we want to play an AudioBuffer
+  const source = audioCtx.createBufferSource(); // audioSourceNode
 
-    // Get extrema
-    if (y > extrema[1]) {
-      extrema[1] = y;
-    } else if (y < extrema[0]) {
-      extrema[0] = y;
-    }
+  // set the buffer in the AudioBufferSourceNode
+  source.buffer = buffer;
 
-    x *= ratioX;
+  // connect the AudioBufferSourceNode to the
+  // destination so we can hear the sound
+  source.connect(audioCtx.destination);
 
-    // Draw potential overflows
-    if (previous && y > 0) {
-      ctx.fillStyle = 'rgba(255, 0, 0, .8)';
-      ctx.fillRect(x - 1, 0, 1, 3);
-    } else if (previous && y < -2) {
-      ctx.fillStyle = 'rgba(255, 0, 0, .8)';
-      ctx.fillRect(x - 1, canvas.height, 1, -3);
-    }
-
-    y *= ratioY;
-
-    // Interpolate each point
-    if (previous) {
-      ctx.moveTo(previous[0], previous[1]);
-      ctx.lineTo(x, y);
-    }
-    previous = [x, y];
-  });
-  ctx.stroke();
-
-  // Extrema
-  ctx.fillStyle = 'rgba(100, 0, 0, .2)';
-  ctx.fillRect(0, extrema[0] * ratioY, canvas.width, 1); // max
-  ctx.fillStyle = 'rgba(0, 100, 0, .2)';
-  ctx.fillRect(0, extrema[1] * ratioY, canvas.width, 1); // min
-
-  return canvas;
-};
-
-(() => {
-  const resizeCanvas = () => {
-    canvas.width = document.querySelector('body').clientWidth;
-  };
-
-  // resize the canvas to fill browser window dynamically
-  window.addEventListener('resize', resizeCanvas, false);
-  resizeCanvas();
-})();
+  source.loop = true;
+  source.start();
+  source.stop(duration / 1000);
+}
 
 /**
  * @param {string} input
@@ -98,12 +51,6 @@ function run(input, period = 100, duration = 1000) {
       }
       nowBuffering[x] = y;
     }
-
-    // console.log(nowBuffering);
-    if (channel === 1) {
-      // ctx.strokeStyle = "#b2835a";
-      plot(nowBuffering, canvas);
-    }
   }
   if (max > 1) {
     console.warn('Max: ', max);
@@ -111,33 +58,7 @@ function run(input, period = 100, duration = 1000) {
 
   playBuffer(buffer, duration);
 
-  // osc.start();
-  // osc.stop(1);
-
   console.log(console.timeEnd('s'));
 
   return buffer;
-}
-
-/**
- * @param {AudioBuffer} buffer
- * @param {number} duration in ms
- */
-function playBuffer(buffer, duration = 1000) {
-  const audioCtx = new AudioContext();
-  // Get an AudioBufferSourceNode.
-  // This is the AudioNode to use when we want to play an AudioBuffer
-  const source = audioCtx.createBufferSource(); // audioSourceNode
-
-  // set the buffer in the AudioBufferSourceNode
-  source.buffer = buffer;
-
-  // connect the AudioBufferSourceNode to the
-  // destination so we can hear the sound
-  source.connect(audioCtx.destination);
-
-  // lance la lecture du so
-  source.loop = true;
-  source.start();
-  source.stop(duration / 1000);
 }

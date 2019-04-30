@@ -43,6 +43,10 @@ input {
     font-size: 22px;
     width: 70px;
 }
+.editor {
+  height: 180px;
+  width: 100%;
+}
 #container {
     border-top: 1px solid #bbb;
     border-bottom: 1px solid #bbb;
@@ -110,14 +114,16 @@ input {
 <div id="buffers"></div>
 <br>
 
-<div id="container" style="width:100%;height:170px"></div>
-<small>[ctrl] + [e] to render the current line</small>
+<div class="editor" id="container"></div>
+<small><kbd>[ctrl]</kbd> + <kbd>[e]</kbd> to render the current line</small>
 
 <script src="loader.js"></script>
 <!-- <script src="https://unpkg.com/monaco-editor/min/vs/loader.js"></script> -->
 <script src="audio.js"></script>
+<script src="canvas.js"></script>
 <script>
 const buffers = [];
+const mainCanvas = document.getElementById('graph');
 
 const miniPlot = (buffer) => {
     const canvasEl = document.createElement('canvas');
@@ -148,8 +154,19 @@ const playBufferN = (n) => {
     playBuffer(buffers[n].buffer, +duration);
 }
 
+const onResizeCanvas = (canvas) => {
+  const resizeCanvas = () => {
+    canvas.width = document.querySelector('body').clientWidth;
+  };
+
+  // resize the canvas to fill browser window dynamically
+  window.addEventListener('resize', resizeCanvas, false);
+  resizeCanvas();
+}
+
 /**
  * @param {AudioBuffer} Buffer
+ * @param {string} input
  */
 const addBuffer = (buffer, input) => {
     buffers.push({ buffer, input });
@@ -175,6 +192,9 @@ const addBuffer = (buffer, input) => {
     document.querySelector('#buffers').append(el);
 }
 
+
+onResizeCanvas(mainCanvas);
+
 const render = editor => {
     const ms = document.querySelector('[name="period"]').value;
     const duration = document.querySelector('[name="duration"]').value;
@@ -185,6 +205,8 @@ const render = editor => {
     const final = lines.concat(last).join("\n");
 
     buffer = run(final, ms, duration);
+
+    plot(buffer.getChannelData(0), mainCanvas);
 
     addBuffer(buffer, final);
 }
@@ -201,15 +223,15 @@ require(['vs/editor/editor.main'], function() {
             // '    return sum;',
             // '}',
             'const a = 440',
-            'const sum = (fn, [min, max]) => Array(max - min + 1).fill().reduce((sum, _, i) => sum + fn(i + min), 0)',
+            'const sum = (fn, [min, max]) => Array(max - min + 1).fill().reduce((sum, _, i) => sum + fn(i + min), 0);',
             '',
-            '// (t*440 - Math.floor(.5 + t*440)) * 2 // sawtooth',
+            '(t*440 - Math.floor(.5 + t*440)) * 2 // sawtooth',
             'Math.sin(440 * Math.log10(t) * Math.PI * 2)',
             'Math.sin(440 * t * Math.PI * 2)',
             'sum(s => Math.sin(440 * t * Math.PI * 2 * s) / 2, [1, 3])',
         ].join('\n'),
         language: 'javascript',
-        lineNumbers: 'off',
+        // lineNumbers: 'off',
         minimap: {
             enabled: false
         },
@@ -226,29 +248,20 @@ require(['vs/editor/editor.main'], function() {
     let isShiftPressed = false;
     let isCtrlPressed = false;
     document.addEventListener('keydown', ({ keyCode }) => {
-
-        if (keyCode === 16) {
-            isShiftPressed = true;
-        }
-        if (keyCode === 17) {
-            isCtrlPressed = true;
-        }
-        if (isShiftPressed && keyCode === 13 || isCtrlPressed && keyCode === 69) { //e
-            render(editor);
-        }
-        const n = keyCode - 48;
-        if (!editor.hasTextFocus() && n > 0 && n < 10 && buffers[n-1]) {
-            playBufferN(n - 1);
-        }
+      keyCode === 16 && (isShiftPressed = true);
+      keyCode === 17 && (isCtrlPressed = true);
+      if (isShiftPressed && keyCode === 13 || isCtrlPressed && keyCode === 69) { //e
+          render(editor);
+      }
+      const n = keyCode - 48;
+      if (!editor.hasTextFocus() && n > 0 && n < 10 && buffers[n-1]) {
+          playBufferN(n - 1);
+      }
     });
 
     document.addEventListener('keyup', ({ keyCode }) => {
-        if (keyCode === 16) {
-            isShiftPressed = false;
-        }
-        if (keyCode === 17) {
-            isCtrlPressed = false;
-        }
+      keyCode === 16 && (isShiftPressed = false);
+      keyCode === 17 && (isCtrlPressed = false);
     });
 });
 </script>
