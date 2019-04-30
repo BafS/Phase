@@ -83,12 +83,8 @@ function run(input, period = 100, duration = 1000) {
   // console.log(audioCtx.sampleRate);
   // console.log(buffer.duration);
 
-  const lines = input.trim().split("\n");
-  const last = `return ${lines.pop()}`; // Last line
-  const final = lines.concat(last).join("\n");
-
   // Function constructor, to evaluate a function
-  const fun = new Function('t', final);
+  const fun = new Function('t', input);
 
   let max = 0;
   for (let channel = 0; channel < buffer.numberOfChannels; channel++) {

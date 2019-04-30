@@ -12,7 +12,11 @@ html {
     margin: 0 2rem;
 }
 body {
+    margin-left: auto;
+    margin-right: auto;
     max-width: 1200px;
+    margin-top: 1rem;
+    margin-bottom: 3rem;
 }
 button {
     float: right;
@@ -23,6 +27,9 @@ button {
 }
 button:hover {
     background: #ddd;
+}
+#graph {
+    height: 350px;
 }
 canvas {
     border: 1px solid #aaa;
@@ -47,12 +54,16 @@ input {
     /* align-content: space-between; */
     flex-flow: row wrap;
 }
-.buffer-play {
+.buffer-play-btn {
     width: 280px;
     background: #f2f2f2;
     border: solid 1px #ddd;
     padding: .5rem;
     display: inline-block;
+}
+.buffer-play-btn:hover {
+    cursor: pointer;
+    border-color: #666;
 }
 #buffers code {
     color: #623;
@@ -66,43 +77,32 @@ input {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-@keyframes flash-animation {
-    from {
-        border-color: red;
-    }
-    to {
-        border-color: yellow;
-    }
-}
-@keyframes loader-animation {
-    from {
-        background: #333;
-        width: 0%;
-    }
-    to {
-        background: #333;
-        width: 100%;
-    }
-}
-.played-animation {
-    animation: flash-animation 1s 1; 
-}
 .loader {
-    background: rgba(0, 0, 0, .1);
+    background: rgba(0, 0, 0, .15);
     display: block;
     height: 5px;
     width: 100%;
-    /* border-left: 1px solid #333; */
-    /* border-right: 1px solid #333; */
+    border-left: 1px solid rgba(0, 0, 0, .3);
+    border-right: 1px solid rgba(0, 0, 0, .3);
     opacity: 0.5;
+    position: relative;
+}
+.loader .bar {
+    position: absolute;
+    width: 0;
+    height: 100%;
+    left: 0;
+    background-color: #da4733;
+    animation: loading 1000ms linear infinite;
 }
 .played-animation .loader {
     animation: loader-animation 1s linear; 
+    animation-duration: 1000ms;
 }
     </style>
 </head>
 <body>
-<canvas id="graph" height="380" width="800"></canvas>
+<canvas id="graph" height="350" width="800"></canvas>
 <br>
 <button id="load">Plot & Play</button>
 <label>Period (plot):</label> <input name="period" type="number" min="0" max="2000" value="50"> ms<br>
@@ -110,7 +110,8 @@ input {
 <div id="buffers"></div>
 <br>
 
-<div id="container" style="width:100%;height:160px"></div>
+<div id="container" style="width:100%;height:170px"></div>
+<small>[ctrl] + [e] to render the current line</small>
 
 <script src="loader.js"></script>
 <!-- <script src="https://unpkg.com/monaco-editor/min/vs/loader.js"></script> -->
@@ -128,11 +129,23 @@ const miniPlot = (buffer) => {
 }
 
 const playBufferN = (n) => {
-    const btn = document.querySelector(`[data-number="${n}"]`);
-    btn.classList.remove('played-animation');
-    void btn.offsetWidth;
-    btn.classList.add('played-animation');
-    playBuffer(buffers[n].buffer);
+    const duration = document.querySelector('[name="duration"]').value;
+    const target = document.querySelector(`[data-number="${n}"] .loader .bar`);
+    const player = target.animate([
+        {
+            opacity: '.7',
+            width: '0'
+        },
+        {
+            opacity: '1',
+            width: '100%'
+        }
+    ], +duration);
+    player.addEventListener('finish', function() {
+        target.style.width = '0';
+    });
+
+    playBuffer(buffers[n].buffer, +duration);
 }
 
 /**
@@ -149,11 +162,11 @@ const addBuffer = (buffer, input) => {
     el.addEventListener('click', () => {
         playBufferN(n);
     });
-    el.classList.add('buffer-play')
+    el.classList.add('buffer-play-btn')
     el.setAttribute('data-number', n)
     el.innerHTML = `
     <span>Buffer #${buffers.length}</span><br>
-    <span class="loader"></span>
+    <span class="loader"><div class="bar"></div></span>
     <code>${last}</code>`;
 
     const canvasEl = miniPlot(buffer);
@@ -165,9 +178,15 @@ const addBuffer = (buffer, input) => {
 const render = editor => {
     const ms = document.querySelector('[name="period"]').value;
     const duration = document.querySelector('[name="duration"]').value;
-    buffer = run(editor.getValue(), ms, duration);
+    const { lineNumber } = editor.getPosition();
 
-    addBuffer(buffer, editor.getValue());
+    const lines = editor.getValue().trim().split("\n").slice(0, lineNumber);
+    const last = `return ${lines.pop()}`; // Last line
+    const final = lines.concat(last).join("\n");
+
+    buffer = run(final, ms, duration);
+
+    addBuffer(buffer, final);
 }
 
 require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor/min/vs' }});
@@ -181,8 +200,10 @@ require(['vs/editor/editor.main'], function() {
             // '    }',
             // '    return sum;',
             // '}',
+            'const a = 440',
             'const sum = (fn, [min, max]) => Array(max - min + 1).fill().reduce((sum, _, i) => sum + fn(i + min), 0)',
             '',
+            '// (t*440 - Math.floor(.5 + t*440)) * 2 // sawtooth',
             'Math.sin(440 * Math.log10(t) * Math.PI * 2)',
             'Math.sin(440 * t * Math.PI * 2)',
             'sum(s => Math.sin(440 * t * Math.PI * 2 * s) / 2, [1, 3])',
@@ -199,13 +220,34 @@ require(['vs/editor/editor.main'], function() {
     document.getElementById('load').addEventListener('click', () => {
         render(editor);
     });
-    render(editor);
+    // render(editor);
     // run(editor.getValue(), 1000);
 
+    let isShiftPressed = false;
+    let isCtrlPressed = false;
     document.addEventListener('keydown', ({ keyCode }) => {
+
+        if (keyCode === 16) {
+            isShiftPressed = true;
+        }
+        if (keyCode === 17) {
+            isCtrlPressed = true;
+        }
+        if (isShiftPressed && keyCode === 13 || isCtrlPressed && keyCode === 69) { //e
+            render(editor);
+        }
         const n = keyCode - 48;
         if (!editor.hasTextFocus() && n > 0 && n < 10 && buffers[n-1]) {
             playBufferN(n - 1);
+        }
+    });
+
+    document.addEventListener('keyup', ({ keyCode }) => {
+        if (keyCode === 16) {
+            isShiftPressed = false;
+        }
+        if (keyCode === 17) {
+            isCtrlPressed = false;
         }
     });
 });
