@@ -3,11 +3,11 @@
  * @param {Float32Array} points
  * @param {HTMLCanvasElement} canvas
  */
-function plot(points, canvas) {
+function plot(points: Float32Array, canvas: HTMLCanvasElement): HTMLCanvasElement {
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.strokeStyle = "#5a83b2";
-  ctx.fillStyle = "rgba(0, 0, 0, .1)";
+  ctx.strokeStyle = '#5a83b2';
+  ctx.fillStyle = 'rgba(0, 0, 0, .1)';
   ctx.fillRect(0, canvas.height / 2, canvas.width, 1); // x line
   ctx.beginPath();
   ctx.lineWidth = 1.5;
@@ -15,7 +15,7 @@ function plot(points, canvas) {
   const ratioY = -canvas.height / 2;
   let previous = null;
   const extrema = [Infinity, -Infinity];
-  points.forEach((y, x) => {
+  points.forEach((y: number, x: number): void => {
     y -= 1;
 
     // Get extrema
@@ -55,3 +55,7 @@ function plot(points, canvas) {
 
   return canvas;
 }
+
+export {
+  plot,
+};

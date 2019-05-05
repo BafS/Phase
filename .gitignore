@@ -1,3 +1,5 @@
 node_modules
 BAK
 *.log
+.cache
+dist
