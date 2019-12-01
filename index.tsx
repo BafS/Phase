@@ -3,6 +3,8 @@ import 'monaco-editor/esm/vs/editor/browser/controller/coreCommands';
 import 'monaco-editor/esm/vs/editor/contrib/find/findController';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import 'monaco-editor/esm/vs/basic-languages/javascript/javascript.contribution';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 import { playBuffer, run } from './audio';
 import * as canvas from './canvas';
