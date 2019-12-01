@@ -6,7 +6,7 @@ function playBuffer(buffer: AudioBuffer, duration: number = 1000): void {
   const audioCtx = new AudioContext();
   // Get an AudioBufferSourceNode.
   // This is the AudioNode to use when we want to play an AudioBuffer
-  const source = audioCtx.createBufferSource(); // audioSourceNode
+  const source = audioCtx.createBufferSource();
 
   // set the buffer in the AudioBufferSourceNode
   source.buffer = buffer;
@@ -26,14 +26,14 @@ function playBuffer(buffer: AudioBuffer, duration: number = 1000): void {
  * @param {number} duration
  * @return {AudioBuffer}
  */
-function run(input: string, period: number = 100, duration: number = 1000): AudioBuffer {
+function process(input: string, period: number = 100, duration: number = 1000): AudioBuffer {
   console.time('s');
 
   const audioCtx = new AudioContext();
 
   const len = period / 1000 * audioCtx.sampleRate; // secs
   const buffer = audioCtx.createBuffer(2, len, audioCtx.sampleRate);
-  // console.log(audioCtx.sampleRate);
+  // console.log('sampleRate: ' + audioCtx.sampleRate);
   // console.log(buffer.duration);
 
   // Function constructor, to evaluate a function
@@ -56,7 +56,7 @@ function run(input: string, period: number = 100, duration: number = 1000): Audi
     console.warn('Max: ', max);
   }
 
-  playBuffer(buffer, duration);
+  // playBuffer(buffer, duration);
 
   console.log(console.timeEnd('s'));
 
@@ -64,6 +64,6 @@ function run(input: string, period: number = 100, duration: number = 1000): Audi
 }
 
 export {
-  run,
+  process,
   playBuffer,
 };
