@@ -96,13 +96,6 @@ const PlotThumb: React.FC<PlotThumb> = ({ buffer, code, stateCallback }): JSX.El
 
 const App: React.FC = (): JSX.Element => {
   const [codeState, setCode] = useState<string>([
-    // 'function sum(fn, [min, max]) {',
-    // '    let sum = 0;',
-    // '    for (let i = min; i <= max; ++i) {',
-    // '        sum += fn(i);',
-    // '    }',
-    // '    return sum;',
-    // '}',
     'const a = 440',
     'const sum = (fn, [min, max]) => Array(max - min + 1).fill().reduce((sum, _, i) => sum + fn(i + min), 0);',
     '',
@@ -122,10 +115,11 @@ const App: React.FC = (): JSX.Element => {
     minimap: {
       enabled: false,
     },
-    lineDecorationsWidth: '.25ch',
+    lineDecorationsWidth: '.2ch',
     lineNumbersMinChars: 3,
     fontSize: 13,
     scrollBeyondLastLine: false,
+    hideCursorInOverviewRuler: true,
   };
 
   const handleDurationChange = (event: BaseSyntheticEvent): void => setDuration(+event.target.value);
@@ -171,7 +165,7 @@ const App: React.FC = (): JSX.Element => {
           }}>Render</Button>
 
           <span>period: <InputNumber min={0} max={100000} defaultValue={period} handleChange={handlePeriodChange} />ms</span><br/>
-          <span>duration (audio generation): <InputNumber min={0} defaultValue={duration} handleChange={handleDurationChange} />md</span>
+          <span>duration (audio generation): <InputNumber min={0} defaultValue={duration} handleChange={handleDurationChange} />ms</span>
           {/* <span>loop:</span> */}
         </div>
 
