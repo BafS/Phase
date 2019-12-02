@@ -1,46 +1,35 @@
-/* .App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-} */
-/*
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-} */
-
 .input {
   /* border: 2px solid rgba(0, 0, 0); */
-  border: 2px solid #555;
-  background: var(--input-bg-color);
-  font-size: 12pt;
-  width: 70px;
+  border: 1px solid var(--main-fg-color);
+  background: transparent;
+  color: var(--main-fg-color);
+  /* background: var(--input-bg-color); */
+  font-size: .9rem;
+  width: 75px;
   padding: 4px 5px;
+  margin: 0 2px;
+  font-family: var(--main-font-family);
 }
 
 .main-plot {
   height: 350px;
+  /* background: #f0f; */
 }
 
 .main-panel {
-  background: rgba(255, 255, 255, .3);
+  /* background: rgba(255, 255, 255, .3); */
   height: 60px;
+  padding: 8px 10px;
+  border-top: 1px solid rgba(255, 255, 255, .2);
 }
 
 .btn {
   float: right;
-  font-size: 1rem;
-  padding: .5rem 2rem;
+  font-size: .9rem;
+  padding: .5rem 1.75rem;
   background: var(--input-bg-color);
-  border: 2px solid #555;
+  font-family: var(--main-font-family);
+  /* border: 2px solid #555; */
 }
 .btn-big {
   font-size: 1rem;
