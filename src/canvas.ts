@@ -1,4 +1,5 @@
 const colors = {
+  background: '#000',
   // function: 'rgba(96, 148, 188, .9)',
   function: 'rgba(60, 169, 248, .8)',
   // function: '#5a83b2',
@@ -37,7 +38,6 @@ function plot(points: Float32Array, canvas: HTMLCanvasElement, clear: boolean = 
   ctx.strokeStyle = colors.strokeStyle;
   // x axis
   const halfHeight = canvasHeight / 2;
-  // TODO: Stroke width ?
   const xAxisNum = 10;
   ctx.setLineDash(options.lineDash);
   for (let i = 1; i < xAxisNum; ++i) {
@@ -48,8 +48,8 @@ function plot(points: Float32Array, canvas: HTMLCanvasElement, clear: boolean = 
     ctx.stroke();
   }
 
-  ctx.fillStyle = 'rgba(100, 100, 100, .5)';
-  ctx.fillRect(0, halfHeight, canvasWidth, 1); // 0 x axis
+  ctx.fillStyle = 'rgba(50, 50, 50, .9)';
+  ctx.fillRect(0, halfHeight + 0.5, canvasWidth, 1); // 0 x axis
 
   ctx.strokeStyle = colors.function;
   ctx.setLineDash([]);
@@ -112,7 +112,8 @@ function plotAudioBuffer(buffer: AudioBuffer, canvas: HTMLCanvasElement): HTMLCa
     throw new Error('Context is not available');
   }
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = colors.background;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   const duration = buffer.duration * 1000; // ms
   const ratio = canvas.width / duration;

@@ -5,7 +5,6 @@ import React, {
   BaseSyntheticEvent,
   useLayoutEffect,
 } from 'react';
-// import Plot from './components/Plot';
 import MonacoEditor from 'react-monaco-editor';
 import { editor } from 'monaco-editor/esm/vs/editor/editor.api';
 import './App.css';
@@ -54,14 +53,13 @@ const Player: React.FC<{
         // set the buffer in the AudioBufferSourceNode
         source.buffer = buffer;
 
-        // connect the AudioBufferSourceNode to the
-        // destination so we can hear the sound
+        // connect the AudioBufferSourceNode to the destination to hear the sound
         source.connect(audioCtx.destination);
 
         isPlaying = true;
         source.loop = true;
         source.start();
-      }}>Play/Stop</Button>
+      }}>play/stop</Button>
     </>
   );
 };
@@ -99,13 +97,18 @@ const App: React.FC = (): JSX.Element => {
     'const a = 440',
     'const sum = (fn, [min, max]) => Array(max - min + 1).fill().reduce((sum, _, i) => sum + fn(i + min), 0);',
     '',
-    // '// (t*440 - Math.floor(.5 + t*440)) * 2 // sawtooth',
+    '// return (-1) ** Math.floor(2*440*t) // square',
+    // '// return 2 * (2*Math.floor(440*t) - Math.floor(2*440*t)) + 1 // square',
+    // return Math.abs(t * 440 % 4 - 2) - 1 // triangle
+    '// return 4 * Math.abs(t*440 - Math.round(t*440)) - 1 // triangle',
+    '// return (t*440 - Math.round(t*440)) * 2 // sawtooth',
+    // '// return (t*440 - Math.floor(.5 + t*440)) * 2 // sawtooth',
     // '// Math.sin(440 * Math.log10(t) * Math.PI * 2)',
-    'return Math.sin(440 * t * Math.PI * 2) * .8',
-    // '// return sum(s => Math.sin(440 * t * Math.PI * 2 * s) / 2, [1, 3])',
+    'return Math.sin(440 * t * Math.PI * 2) * 1',
+    '// return sum(s => Math.sin(440 * t * Math.PI * 2 * s) / 2, [1, 3])',
   ].join('\n'));
   const [bufferState, setBuffer] = useState<AudioBuffer|null>(null);
-  const [plotStateList, setPlotStateList] = useState<PlotState[]>([]);
+  // const [plotStateList, setPlotStateList] = useState<PlotState[]>([]);
   const [width, setWidth] = useState<number>(window.innerWidth);
   const [duration, setDuration] = useState<number>(1000);
   const [period, setPeriod] = useState<number>(100);
@@ -138,10 +141,8 @@ const App: React.FC = (): JSX.Element => {
 
   return (
     <div className="App">
-      {/* <PlotPanel code={codeState}/> */}
-      {/* <Plot buffer={buffer}/> */}
-
       <div>
+        <div className="text-title">PHASE</div>
         <div className="main-plot">
           {bufferState
             ? <Player buffer={bufferState} options={{ width, height: 350 }}/>
@@ -175,10 +176,11 @@ const App: React.FC = (): JSX.Element => {
           </span><br/>
           {/* <span>loop:</span> */}
         </div>
-
+        {/*
         {plotStateList !== []
           ? plotStateList.map((b): JSX.Element => <PlotThumb buffer={b.buffer} code={b.code} stateCallback={(info: PlotState) => console.log(info)}/>)
-          : ''}
+          : ''} */}
+        {/* <span className="darker">A = F(t), {`{ t | 0 ≤ t ≤ ${period}}`}</span> */}
       </div>
 
       <div className="editor-panel">
