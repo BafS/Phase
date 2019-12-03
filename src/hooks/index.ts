@@ -1,8 +1,8 @@
 import { useRef, useState, useEffect } from 'react';
 
 // https://gist.github.com/mudge/eb9178a4b6d595ffde8f9cb31744afcf
-const useDebounce = (callback, delay: number) => {
-  const latestCallback = useRef();
+const useDebounce = (callback: () => any, delay: number) => {
+  const latestCallback = useRef<any>();
   const [callCount, setCallCount] = useState<number>(0);
 
   useEffect((): void => {
