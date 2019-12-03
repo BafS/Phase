@@ -4,3 +4,4 @@ BAK
 .cache
 dist
 _*
+build

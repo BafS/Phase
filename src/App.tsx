@@ -109,6 +109,7 @@ const App: React.FC = (): JSX.Element => {
   const [width, setWidth] = useState<number>(window.innerWidth);
   const [duration, setDuration] = useState<number>(1000);
   const [period, setPeriod] = useState<number>(100);
+  const [errorCode, setErrorCode] = useState<string>('');
 
   const options: editor.IEditorOptions = {
     selectOnLineNumbers: true,
@@ -154,18 +155,24 @@ const App: React.FC = (): JSX.Element => {
               setPlotStateList([...plotStateList, { code: codeState, buffer: bufferState }]);
             }
           }}>Save</Button>
-
           <Button handleClick={(): void => {
           }}>Play loop</Button> */}
 
           <Button handleClick={(): void => {
             // if (bufferState === null) {
-            const audioBuffer = process(codeState, period, duration);
-            setBuffer(audioBuffer);
-          }}>Render</Button>
+            try {
+              const audioBuffer = process(codeState, period, duration);
+              setBuffer(audioBuffer);
+              setErrorCode('');
+            } catch (e) {
+              setErrorCode(e.toString());
+            }
+          }}>render</Button>
 
-          <span>period: <InputNumber min={0} max={100000} defaultValue={period} handleChange={handlePeriodChange} />ms</span><br/>
-          <span>duration (audio generation): <InputNumber min={0} defaultValue={duration} handleChange={handleDurationChange} />ms</span>
+          <span>
+            <em>t<sub>max</sub></em>:
+            <InputNumber min={0} max={100000} defaultValue={period} handleChange={handlePeriodChange} />ms
+          </span><br/>
           {/* <span>loop:</span> */}
         </div>
 
@@ -174,16 +181,20 @@ const App: React.FC = (): JSX.Element => {
           : ''}
       </div>
 
-      <MonacoEditor
-        width={width}
-        height="260"
-        language="javascript"
-        theme="vs-dark"
-        value={codeState}
-        options={options}
-        onChange={setCode}
-        editorDidMount={editorDidMount}
-      />
+      <div className="editor-panel">
+        <span><em>F(t)</em> = </span>
+        {errorCode ? <div className="text-error">{errorCode}</div> : ''}
+        <MonacoEditor
+          width={width}
+          height="270"
+          language="javascript"
+          theme="vs-dark"
+          value={codeState}
+          options={options}
+          onChange={setCode}
+          editorDidMount={editorDidMount}
+        />
+      </div>
     </div>
   );
 };

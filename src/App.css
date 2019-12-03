@@ -21,6 +21,14 @@
   height: 60px;
   padding: 8px 10px;
   border-top: 1px solid rgba(255, 255, 255, .2);
+
+.text-error {
+  padding: 10px 0;
+  color: rgba(230, 81, 0);
+}
+
+.editor-panel .react-monaco-editor-container {
+  margin-top: 6px;
 }
 
 .btn {
@@ -45,4 +53,8 @@
 
 .plot {
   background: #eee;
+}
+
+.darker {
+  color: #888;
 }
