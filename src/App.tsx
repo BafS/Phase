@@ -12,7 +12,7 @@ import Button from './components/Button';
 import InputNumber from './components/InputNumber';
 import { process } from './audio';
 import { plotAudioBuffer } from './canvas';
-import { useDebounce } from './hooks';
+import { useDebounce, useKeyboardShortcut } from './hooks';
 
 interface PlotState {
   code: string;
@@ -58,16 +58,15 @@ const Player: React.FC<{
     return (): void => source && source.stop();
   }, [isPlaying]);
 
+  useKeyboardShortcut(['Shift', 'P'], useCallback((): void => {
+    setIsPlaying((prevPlaying): boolean => !prevPlaying);
+  }, [setIsPlaying]));
+
   return (
     <>
       <Plot buffer={buffer} options={{ width, height }} />
       <Button handleClick={(): void => {
-        if (isPlaying) {
-          setIsPlaying(false);
-          return;
-        }
-
-        setIsPlaying(true);
+        setIsPlaying((p): boolean => !p);
       }}>{isPlaying ? 'stop' : 'play'}</Button>
     </>
   );
