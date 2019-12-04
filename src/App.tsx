@@ -32,34 +32,43 @@ const Player: React.FC<{
   buffer: AudioBuffer;
   options: Size;
 }> = ({ buffer, options: { width, height } = { width: 800, height: 350 } }): JSX.Element => {
-  const audioCtx = new AudioContext();
-  let isPlaying = false;
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
   let source: AudioBufferSourceNode;
+
+  useEffect((): (() => void) => {
+    const audioCtx = new AudioContext();
+
+    if (isPlaying) {
+      // Get an AudioBufferSourceNode.
+      // This is the AudioNode to use when we want to play an AudioBuffer
+      source = audioCtx.createBufferSource();
+
+      // set the buffer in the AudioBufferSourceNode
+      source.buffer = buffer;
+
+      // connect the AudioBufferSourceNode to the destination to hear the sound
+      source.connect(audioCtx.destination);
+
+      source.loop = true;
+      source.start();
+    } else if (source) {
+      source.stop();
+    }
+
+    return (): void => source && source.stop();
+  }, [isPlaying]);
 
   return (
     <>
       <Plot buffer={buffer} options={{ width, height }} />
       <Button handleClick={(): void => {
         if (isPlaying) {
-          source.stop();
-          isPlaying = false;
+          setIsPlaying(false);
           return;
         }
 
-        // Get an AudioBufferSourceNode.
-        // This is the AudioNode to use when we want to play an AudioBuffer
-        source = audioCtx.createBufferSource();
-
-        // set the buffer in the AudioBufferSourceNode
-        source.buffer = buffer;
-
-        // connect the AudioBufferSourceNode to the destination to hear the sound
-        source.connect(audioCtx.destination);
-
-        isPlaying = true;
-        source.loop = true;
-        source.start();
-      }}>play/stop</Button>
+        setIsPlaying(true);
+      }}>{isPlaying ? 'stop' : 'play'}</Button>
     </>
   );
 };
@@ -88,7 +97,7 @@ const Plot: React.FC<{
 const PlotThumb: React.FC<PlotThumb> = ({ buffer, code, stateCallback }): JSX.Element => (
   <div style={{ background: '#eee' }}>
     <Plot buffer={buffer} options={{ width: 400, height: 200 }} />
-    <Button label="edit" handleClick={(): void => stateCallback({ buffer, code })} />
+    <Button handleClick={(): void => stateCallback({ buffer, code })}>edit</Button>
   </div>
 );
 
