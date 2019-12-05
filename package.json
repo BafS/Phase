@@ -11,13 +11,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BafS/Equations-Player.git"
+    "url": "git+https://github.com/BafS/Phase.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/BafS/Equations-Player/issues"
+    "url": "https://github.com/BafS/Phase/issues"
   },
-  "homepage": "https://github.com/BafS/Equations-Player#readme",
+  "homepage": "https://github.com/BafS/Phase#readme",
   "dependencies": {
     "@types/jest": "^24.0.23",
     "@types/node": "^12.12.14",

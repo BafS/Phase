@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/BafS/Equations-Player/static/css/main.e0d3e8a9.chunk.css",
-    "main.js": "/BafS/Equations-Player/static/js/main.b589feb2.chunk.js",
-    "runtime-main.js": "/BafS/Equations-Player/static/js/runtime-main.e5232d4c.js",
-    "static/css/2.430a3d82.chunk.css": "/BafS/Equations-Player/static/css/2.430a3d82.chunk.css",
-    "static/js/2.6cc84886.chunk.js": "/BafS/Equations-Player/static/js/2.6cc84886.chunk.js",
-    "static/js/3.bb302cf7.chunk.js": "/BafS/Equations-Player/static/js/3.bb302cf7.chunk.js",
-    "static/js/4.0e849903.chunk.js": "/BafS/Equations-Player/static/js/4.0e849903.chunk.js",
-    "static/js/5.0086aefb.chunk.js": "/BafS/Equations-Player/static/js/5.0086aefb.chunk.js",
-    "editor.worker.js": "/BafS/Equations-Player/editor.worker.js",
-    "index.html": "/BafS/Equations-Player/index.html",
-    "precache-manifest.047c912bfbb482605d91b1f71f3218da.js": "/BafS/Equations-Player/precache-manifest.047c912bfbb482605d91b1f71f3218da.js",
-    "service-worker.js": "/BafS/Equations-Player/service-worker.js",
-    "typescript.worker.js": "/BafS/Equations-Player/typescript.worker.js"
+    "main.css": "./static/css/main.e0d3e8a9.chunk.css",
+    "main.js": "./static/js/main.165cfd94.chunk.js",
+    "runtime-main.js": "./static/js/runtime-main.b89e7c60.js",
+    "static/css/2.430a3d82.chunk.css": "./static/css/2.430a3d82.chunk.css",
+    "static/js/2.a89e22ac.chunk.js": "./static/js/2.a89e22ac.chunk.js",
+    "static/js/3.bb302cf7.chunk.js": "./static/js/3.bb302cf7.chunk.js",
+    "static/js/4.0e849903.chunk.js": "./static/js/4.0e849903.chunk.js",
+    "static/js/5.0086aefb.chunk.js": "./static/js/5.0086aefb.chunk.js",
+    "editor.worker.js": "./editor.worker.js",
+    "index.html": "./index.html",
+    "precache-manifest.b61f2d4a8e00d15d31fb4f14867efb85.js": "./precache-manifest.b61f2d4a8e00d15d31fb4f14867efb85.js",
+    "service-worker.js": "./service-worker.js",
+    "typescript.worker.js": "./typescript.worker.js"
   },
   "entrypoints": [
-    "static/js/runtime-main.e5232d4c.js",
+    "static/js/runtime-main.b89e7c60.js",
     "static/css/2.430a3d82.chunk.css",
-    "static/js/2.6cc84886.chunk.js",
+    "static/js/2.a89e22ac.chunk.js",
     "static/css/main.e0d3e8a9.chunk.css",
-    "static/js/main.b589feb2.chunk.js"
+    "static/js/main.165cfd94.chunk.js"
   ]
 }
