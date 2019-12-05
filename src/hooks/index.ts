@@ -34,7 +34,7 @@ const useDebounce = (callback: () => any, delay: number): () => any => {
 
 // Adapted from
 // https://github.com/arthurtyukayev/use-keyboard-shortcut/blob/master/useKeyboardShortcut.js
-const blacklistedTargets = ['INPUT', 'TEXTAREA'];
+const blacklistedTargets = ['INPUT'];
 
 const ACTION_SET_KEY_UP = 'ACTION_SET_KEY_UP';
 const ACTION_SET_KEY_DOWN = 'ACTION_SET_KEY_DOWN';
