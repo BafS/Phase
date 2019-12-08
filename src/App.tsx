@@ -52,11 +52,11 @@ const Player: React.FC<{
 
       source.loop = true;
       source.start();
-    } else if (source) {
-      source.stop();
+    } else {
+      source?.stop();
     }
 
-    return (): void => source && source.stop();
+    return (): void => source?.stop();
   }, [isPlaying]);
 
   useKeyboardShortcut(['Control', 'S'], useCallback((): void => {
@@ -182,12 +182,8 @@ const App: React.FC = (): JSX.Element => {
   const handleProcess = (): void => doProcess(codeState);
 
   const handleProcessLine = (): void => {
-    if (!monaco) {
-      return;
-    }
-
-    const position = monaco.getPosition();
-    if (position === null) {
+    const position = monaco?.getPosition();
+    if (!position) {
       return;
     }
 
