@@ -84,7 +84,7 @@ const App: React.FC = (): JSX.Element => {
     const finalCode = lines.concat(last).join('\n');
 
     try {
-      const audioBuffer = process(finalCode, period, duration);
+      const audioBuffer = process(finalCode, period);
       setBuffer(audioBuffer);
       setErrorCode('');
     } catch (e) {

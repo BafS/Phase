@@ -3,6 +3,24 @@ import { useKeyboardShortcut } from '../hooks';
 import Plot from './Plot';
 import Button from './Button';
 import { Size } from '../types';
+import { audioBufferToWaveBlob } from '../audio';
+
+const saveFile = (blob: Blob, filename: string): void => {
+  if (window.navigator.msSaveOrOpenBlob) {
+    window.navigator.msSaveOrOpenBlob(blob, filename);
+  } else {
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    const url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = filename;
+    a.click();
+    setTimeout((): void => {
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    }, 0);
+  }
+};
 
 const Player: React.FC<{
   buffer: AudioBuffer;
@@ -47,7 +65,10 @@ const Player: React.FC<{
         <Button className="btn btn-sm" handleClick={(): void => {
           setIsPlaying((p): boolean => !p);
         }}>{isPlaying ? 'stop' : 'play'}</Button>
-        <span className="text-dark text-sm"> (Ctrl+S)</span>
+        <span className="text-dark text-sm"> (Ctrl+S) | </span>
+        <Button className="btn btn-sm" handleClick={(): void => {
+          audioBufferToWaveBlob(buffer).then((a): void => saveFile(a, 'phase-generated.wav'));
+        }}>download</Button>
       </div>
     </div>
   );

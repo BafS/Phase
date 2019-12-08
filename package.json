@@ -36,7 +36,8 @@
     "eslint-plugin-import": "^2.18.2",
     "monaco-editor-webpack-plugin": "^1.7.0",
     "react-app-rewired": "^2.1.5",
-    "typescript": "^3.7.3"
+    "typescript": "^3.7.3",
+    "worker-loader": "^2.0.0"
   },
   "browserslist": {
     "production": [

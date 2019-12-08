@@ -1,7 +1,9 @@
+import WaveWorker from './waveWorker.js';
+
 /**
  * Process javascript code to audio buffer
  */
-function process(input: string, period: number = 100, duration: number = 1000): AudioBuffer {
+function process(input: string, period: number = 100): AudioBuffer {
   console.time('s');
 
   const audioCtx = new AudioContext();
@@ -31,13 +33,33 @@ function process(input: string, period: number = 100, duration: number = 1000): 
     console.warn('Max: ', max);
   }
 
-  // playBuffer(buffer, duration);
-
   console.log(console.timeEnd('s'));
 
   return buffer;
 }
 
+async function audioBufferToWaveBlob(audioBuffer: AudioBuffer): Promise<Blob> {
+  return new Promise<Blob>((resolve: (blob: Blob) => void): void => {
+    const worker: any = new WaveWorker();
+
+    worker.onmessage = (e: any): void => {
+      const blob = new Blob([e.data.buffer], { type: 'audio/wav' });
+      resolve(blob);
+    };
+
+    const pcmArrays = [];
+    for (let i = 0; i < audioBuffer.numberOfChannels; ++i) {
+      pcmArrays.push(audioBuffer.getChannelData(i));
+    }
+
+    worker.postMessage({
+      pcmArrays,
+      config: { sampleRate: audioBuffer.sampleRate },
+    });
+  });
+}
+
 export {
   process,
+  audioBufferToWaveBlob,
 };
