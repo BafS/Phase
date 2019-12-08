@@ -124,12 +124,12 @@ const useKeyboardShortcut = (shortcutKeys: string[], callback: (key: KeysReducer
     }
   }, [callback, keys]);
 
-  useEffect((): (() => any) => {
+  useEffect((): () => void => {
     window.addEventListener('keydown', keydownListener, true);
     return (): void => window.removeEventListener('keydown', keydownListener, true);
   }, [keydownListener]);
 
-  useEffect((): (() => any) => {
+  useEffect((): () => void => {
     window.addEventListener('keyup', keyupListener, true);
     return (): void => window.removeEventListener('keyup', keyupListener, true);
   }, [keyupListener]);

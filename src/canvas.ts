@@ -1,8 +1,6 @@
 const colors = {
   background: '#000',
-  // function: 'rgba(96, 148, 188, .9)',
   function: 'rgba(60, 169, 248, .8)',
-  // function: '#5a83b2',
   overflow: 'rgba(255, 0, 0, .75)',
   strokeStyle: 'rgba(200, 200, 200, .25)',
   text: 'rgba(200, 200, 200, .9)',

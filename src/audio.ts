@@ -1,30 +1,5 @@
 /**
- * @param {AudioBuffer} buffer
- * @param {number} duration in ms
- */
-function playBuffer(buffer: AudioBuffer, duration: number = 1000): void {
-  const audioCtx = new AudioContext();
-  // Get an AudioBufferSourceNode.
-  // This is the AudioNode to use when we want to play an AudioBuffer
-  const source = audioCtx.createBufferSource();
-
-  // set the buffer in the AudioBufferSourceNode
-  source.buffer = buffer;
-
-  // connect the AudioBufferSourceNode to the
-  // destination so we can hear the sound
-  source.connect(audioCtx.destination);
-
-  source.loop = true;
-  source.start();
-  source.stop(duration / 1000);
-}
-
-/**
- * @param {string} input
- * @param {number} period
- * @param {number} duration
- * @return {AudioBuffer}
+ * Process javascript code to audio buffer
  */
 function process(input: string, period: number = 100, duration: number = 1000): AudioBuffer {
   console.time('s');
@@ -65,5 +40,4 @@ function process(input: string, period: number = 100, duration: number = 1000): 
 
 export {
   process,
-  playBuffer,
 };

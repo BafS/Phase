@@ -25,9 +25,13 @@
   height: 375px;
 }
 
-.main-plot > span {
+.main-plot > .placeholder {
+  padding-top: 110px;
+}
+
+.main-plot > .placeholder > span {
   display: block;
-  padding-top: 80px;
+  padding-top: 50px;
 }
 
 .main-panel {
