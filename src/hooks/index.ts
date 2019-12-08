@@ -7,7 +7,7 @@ import {
 } from 'react';
 
 // https://gist.github.com/mudge/eb9178a4b6d595ffde8f9cb31744afcf
-const useDebounce = (callback: () => any, delay: number): () => any => {
+const useDebounce = (callback: () => void, delay: number): () => void => {
   const latestCallback = useRef<Function>();
   const [callCount, setCallCount] = useState<number>(0);
 
@@ -39,12 +39,8 @@ const blacklistedTargets = ['INPUT'];
 const ACTION_SET_KEY_UP = 'ACTION_SET_KEY_UP';
 const ACTION_SET_KEY_DOWN = 'ACTION_SET_KEY_DOWN';
 
-type KeysActionType =
-  | 'ACTION_SET_KEY_UP'
-  | 'ACTION_SET_KEY_DOWN';
-
 interface KeysAction {
-  type: KeysActionType;
+  type: typeof ACTION_SET_KEY_UP | typeof ACTION_SET_KEY_DOWN;
   key: string;
 }
 
@@ -130,12 +126,12 @@ const useKeyboardShortcut = (shortcutKeys: string[], callback: (key: KeysReducer
 
   useEffect((): (() => any) => {
     window.addEventListener('keydown', keydownListener, true);
-    return () => window.removeEventListener('keydown', keydownListener, true);
+    return (): void => window.removeEventListener('keydown', keydownListener, true);
   }, [keydownListener]);
 
   useEffect((): (() => any) => {
     window.addEventListener('keyup', keyupListener, true);
-    return () => window.removeEventListener('keyup', keyupListener, true);
+    return (): void => window.removeEventListener('keyup', keyupListener, true);
   }, [keyupListener]);
 };
 

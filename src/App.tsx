@@ -6,8 +6,8 @@ import React, {
   useLayoutEffect,
   useCallback,
 } from 'react';
-import MonacoEditor from 'react-monaco-editor';
-import { editor } from 'monaco-editor/esm/vs/editor/editor.api';
+import MonacoEditor, { EditorDidMount } from 'react-monaco-editor';
+import { editor } from 'react-monaco-editor/node_modules/monaco-editor/esm/vs/editor/editor.api';
 import './App.css';
 import Button from './components/Button';
 import InputNumber from './components/InputNumber';
@@ -34,10 +34,10 @@ const Player: React.FC<{
   options: Size;
 }> = ({ buffer, options: { width, height } = { width: 800, height: 350 } }): JSX.Element => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  let source: AudioBufferSourceNode;
 
   useEffect((): (() => void) => {
     const audioCtx = new AudioContext();
+    let source: AudioBufferSourceNode | undefined;
 
     if (isPlaying) {
       // Get an AudioBufferSourceNode.
@@ -133,7 +133,7 @@ const App: React.FC = (): JSX.Element => {
   const [period, setPeriod] = useState<number>(100);
   const [errorCode, setErrorCode] = useState<string>('');
 
-  const options: editor.IEditorOptions = {
+  const options: Readonly<editor.IEditorConstructionOptions> = {
     selectOnLineNumbers: true,
     minimap: {
       enabled: false,
@@ -149,7 +149,7 @@ const App: React.FC = (): JSX.Element => {
 
   const handlePeriodChange = (event: BaseSyntheticEvent): void => setPeriod(+event.target.value);
 
-  const editorDidMount = (monacoMount: editor.IStandaloneCodeEditor): void => {
+  const editorDidMount: EditorDidMount = (monacoMount: editor.IStandaloneCodeEditor): void => {
     monaco = monacoMount;
     monaco.focus();
   };

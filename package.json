@@ -23,6 +23,7 @@
     "@types/node": "^12.12.14",
     "@types/react": "^16.9.15",
     "@types/react-dom": "^16.9.4",
+    "monaco-editor-webpack-plugin": "^1.7.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-monaco-editor": "^0.25.1",
@@ -34,7 +35,6 @@
     "eslint": "^6.7.2",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.2",
-    "monaco-editor-webpack-plugin": "^1.7.0",
     "react-app-rewired": "^2.1.5",
     "typescript": "^3.7.3"
   },

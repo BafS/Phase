@@ -14,6 +14,7 @@ module.exports = {
     'no-param-reassign': 0,
     'no-new-func': 0,
     'import/no-unresolved': 0,
+    'no-unused-vars': 0, // duplicate with @typescript-eslint/no-unused-vars
     'react-hooks/exhaustive-deps': 'warn',
     '@typescript-eslint/indent': ['error', 2],
   },
