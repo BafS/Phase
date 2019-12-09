@@ -9,16 +9,14 @@ module.exports = function override(config) {
       languages: ['javascript', 'typescript'],
       features: [
         'accessibilityHelp', 'bracketMatching', 'caretOperations', 'codeAction', 'comment', 'contextmenu',
-        'coreCommands', 'cursorUndo', 'dnd', 'folding', 'fontZoom', 'format', 'goToDefinitionCommands',
-        'goToDefinitionMouse', 'gotoError', 'hover', 'inPlaceReplace', 'inspectTokens', 'iPadShowKeyboard',
-        'linesOperations', 'links', 'multicursor', 'parameterHints', 'quickCommand', 'quickOutline',
-        'smartSelect', 'snippets', 'suggest', 'transpose',
-        'wordHighlighter', 'wordOperations', 'wordPartOperations'],
+        'cursorUndo', 'fontZoom', 'goToDefinitionMouse', 'hover', 'inPlaceReplace', 'inspectTokens',
+        'iPadShowKeyboard', 'linesOperations', 'links', 'multicursor', 'parameterHints',
+        'smartSelect', 'suggest', 'transpose', 'wordHighlighter', 'wordOperations', 'wordPartOperations'],
     }),
   );
 
   config.module.rules.push({
-    test: /waveWorker\.[jt]s$/,
+    test: /waveWorker\.js$/,
     use: { loader: 'worker-loader' },
   });
 

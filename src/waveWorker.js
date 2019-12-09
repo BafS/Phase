@@ -1,5 +1,8 @@
 // Adapted from https://stackoverflow.com/a/42632646
 
+/* eslint-disable no-restricted-globals */
+/* eslint-disable no-bitwise */
+
 const WavePCM = function (config) {
   this.sampleRate = config.sampleRate || 48000;
   this.bitDepth = config.bitDepth || 16;
@@ -34,7 +37,7 @@ WavePCM.prototype.record = function (buffers) {
       // bit reduce and convert to uInt
       switch (this.bytesPerSample) {
         case 4:
-          sample = sample * 2147483648;
+          sample *= 2147483648;
           reducedData[outputIndex] = sample;
           reducedData[outputIndex + 1] = sample >> 8;
           reducedData[outputIndex + 2] = sample >> 16;
@@ -42,14 +45,14 @@ WavePCM.prototype.record = function (buffers) {
           break;
 
         case 3:
-          sample = sample * 8388608;
+          sample *= 8388608;
           reducedData[outputIndex] = sample;
           reducedData[outputIndex + 1] = sample >> 8;
           reducedData[outputIndex + 2] = sample >> 16;
           break;
 
         case 2:
-          sample = sample * 32768;
+          sample *= 32768;
           reducedData[outputIndex] = sample;
           reducedData[outputIndex + 1] = sample >> 8;
           break;
