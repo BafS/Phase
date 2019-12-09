@@ -4,14 +4,12 @@ import WaveWorker from './waveWorker.js';
  * Process javascript code to audio buffer
  */
 function process(input: string, period: number = 100): AudioBuffer {
-  console.time('s');
+  console.time('generation');
 
   const audioCtx = new AudioContext();
 
   const len = period / 1000 * audioCtx.sampleRate; // secs
   const buffer = audioCtx.createBuffer(2, len, audioCtx.sampleRate);
-  // console.log('sampleRate: ' + audioCtx.sampleRate);
-  // console.log(buffer.duration);
 
   // Function constructor, to evaluate a function
   const fun = new Function('t', input);
@@ -29,11 +27,8 @@ function process(input: string, period: number = 100): AudioBuffer {
       nowBuffering[x] = y;
     }
   }
-  if (max > 1) {
-    console.warn('Max: ', max);
-  }
 
-  console.log(console.timeEnd('s'));
+  console.timeEnd('generation');
 
   return buffer;
 }

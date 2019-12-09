@@ -25,30 +25,20 @@ const App: React.FC = (): JSX.Element => {
   let monaco: editor.IStandaloneCodeEditor;
 
   const [codeState, setCode] = useState<string>([
-    'const a = 440;',
-    'const sum = (fn, [min, max]) => Array(max - min + 1).fill().reduce((sum, _, i) => sum + fn(i + min), 0);',
-    '',
     '// Main waveforms',
     '(-1) ** Math.floor(2 * 440 * t); // square',
-    // '// return 2 * (2*Math.floor(440*t) - Math.floor(2*440*t)) + 1 // square',
-    // return Math.abs(t * 440 % 4 - 2) - 1 // triangle
     '(440 * t - Math.round(440 * t)) * 2; // sawtooth',
     '4 * Math.abs(440 * t - Math.round(t*440)) - 1; // triangle',
     'Math.sin(440 * t * Math.PI * 2) * .2; // sine',
-    // '// return (t*440 - Math.floor(.5 + t*440)) * 2 // sawtooth',
-    // '// Math.sin(440 * Math.log10(t) * Math.PI * 2)',
-    // '// Other',
-    // 'Math.sin(440 * t * Math.PI * 2) * .2; // reduce amplitude',
-    // 'sum(s => Math.sin(440 * t * Math.PI * 2 * s) / 2, [1, 3]);',
   ].join('\n'));
   const [bufferState, setBuffer] = useState<AudioBuffer|null>(null);
   const [width, setWidth] = useState<number>(window.innerWidth);
-  const [duration, setDuration] = useState<number>(1000);
   const [period, setPeriod] = useState<number>(100);
   const [errorCode, setErrorCode] = useState<string>('');
 
   const options: Readonly<editor.IEditorConstructionOptions> = {
     selectOnLineNumbers: true,
+    automaticLayout: true,
     minimap: {
       enabled: false,
     },
@@ -58,8 +48,6 @@ const App: React.FC = (): JSX.Element => {
     scrollBeyondLastLine: false,
     hideCursorInOverviewRuler: true,
   };
-
-  const handleDurationChange = (event: BaseSyntheticEvent): void => setDuration(+event.target.value);
 
   const handlePeriodChange = (event: BaseSyntheticEvent): void => setPeriod(+event.target.value);
 
@@ -119,25 +107,22 @@ const App: React.FC = (): JSX.Element => {
 
   return (
     <div className="App">
-      <div>
-        <div className="text-title">PHASE</div>
-        <div className="main-plot">
-          {bufferState
-            ? <Player buffer={bufferState} options={{ width, height: 350 }}/>
-            : <Placeholder/>}
+      <div className="text-title">PHASE</div>
+      <div className="main-plot">
+        {bufferState
+          ? <Player buffer={bufferState} options={{ width, height: 350 }}/>
+          : <Placeholder/>}
+      </div>
+
+      <div className="main-panel">
+        <div className="left">
+          <em>t<sub>max</sub></em>:
+          <InputNumber min={0} max={100000} defaultValue={period} handleChange={handlePeriodChange} />ms
         </div>
-
-        <div className="main-panel">
-          <div className="right">
-            <Button handleClick={handleProcess}>process code</Button>
-            <span className="text-dark text-sm"> (Ctrl+1)</span><br/>
-            <span className="text-dark text-sm">process line: (Ctrl+2)</span>
-          </div>
-
-          <span>
-            <em>t<sub>max</sub></em>:
-            <InputNumber min={0} max={100000} defaultValue={period} handleChange={handlePeriodChange} />ms
-          </span><br/>
+        <div className="right">
+          <Button handleClick={handleProcess}>process code</Button>
+          <span className="text-dark text-sm"> (Ctrl+1)</span><br/>
+          <span className="text-dark text-sm">process line: (Ctrl+2)</span>
         </div>
       </div>
 
@@ -145,8 +130,6 @@ const App: React.FC = (): JSX.Element => {
         <span><em>F(t)</em> = </span>
         {errorCode ? <div className="text-error">{errorCode}</div> : ''}
         <MonacoEditor
-          width={width}
-          height="270"
           language="javascript"
           theme="vs-dark"
           value={codeState}
@@ -154,6 +137,10 @@ const App: React.FC = (): JSX.Element => {
           onChange={setCode}
           editorDidMount={editorDidMount}
         />
+      </div>
+
+      <div className="footer-panel">
+        Fork me on <a href="https://github.com/BafS/Phase">github</a>
       </div>
     </div>
   );
