@@ -25,11 +25,13 @@ const App: React.FC = (): JSX.Element => {
   let monaco: editor.IStandaloneCodeEditor;
 
   const [codeState, setCode] = useState<string>([
-    '// Main waveforms',
+    '// Javascript code to evaluate your function F(t)',
+    '',
+    '// Main waveforms (https://en.wikipedia.org/wiki/Waveform)',
     '(-1) ** Math.floor(2 * 440 * t); // square',
     '(440 * t - Math.round(440 * t)) * 2; // sawtooth',
     '4 * Math.abs(440 * t - Math.round(t*440)) - 1; // triangle',
-    'Math.sin(440 * t * Math.PI * 2) * .2; // sine',
+    'Math.sin(440 * t * Math.PI * 2); // sine',
   ].join('\n'));
   const [bufferState, setBuffer] = useState<AudioBuffer|null>(null);
   const [width, setWidth] = useState<number>(window.innerWidth);
