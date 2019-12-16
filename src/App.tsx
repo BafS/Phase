@@ -24,7 +24,7 @@ const Placeholder: React.FC = (): JSX.Element => (
 const App: React.FC = (): JSX.Element => {
   let monaco: editor.IStandaloneCodeEditor;
 
-  const [codeState, setCode] = useState<string>([
+  const codeBase = [
     '// Javascript code to evaluate your function F(t)',
     '',
     '// Main waveforms (https://en.wikipedia.org/wiki/Waveform)',
@@ -32,7 +32,9 @@ const App: React.FC = (): JSX.Element => {
     '(440 * t - Math.round(440 * t)) * 2; // sawtooth',
     '4 * Math.abs(440 * t - Math.round(t*440)) - 1; // triangle',
     'Math.sin(440 * t * Math.PI * 2); // sine',
-  ].join('\n'));
+  ].join('\n');
+
+  const [codeState, setCode] = useState<string>(codeBase);
   const [bufferState, setBuffer] = useState<AudioBuffer|null>(null);
   const [width, setWidth] = useState<number>(window.innerWidth);
   const [period, setPeriod] = useState<number>(100);
@@ -142,7 +144,13 @@ const App: React.FC = (): JSX.Element => {
       </div>
 
       <div className="footer-panel">
-        Fork me on <a href="https://github.com/BafS/Phase">github</a>
+        <div className="left">
+          <span className="btn-link" onClick={(): void => setCode('')}>clear editor</span>
+          <span className="btn-link" onClick={(): void => setCode(codeBase)}>load main waveforms</span>
+        </div>
+        <div className="right">
+          Fork me on <a href="https://github.com/BafS/Phase">github</a>
+        </div>
       </div>
     </div>
   );

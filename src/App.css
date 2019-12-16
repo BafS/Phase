@@ -72,16 +72,26 @@
 }
 
 .footer-panel {
-  margin-top: 25px;
   flex: 1;
+  display: flex;
+  margin-top: 25px;
+  justify-content: space-between;
   width: 100%;
   text-align: center;
   font-size: 0.8rem;
   opacity: 0.6;
 }
 
+.footer-panel .left, .footer-panel .right {
+  padding: 0 12px;
+}
+
 .footer-panel a {
   color: #d9dadb;
+}
+
+.footer-panel .right {
+  margin-left: auto;
 }
 
 .editor-panel .react-monaco-editor-container {
@@ -133,4 +143,10 @@
   margin: 0 12px;
   margin-top: 5px;
   margin-left: auto;
+}
+
+.btn-link {
+  text-decoration: underline;
+  margin-right: 12px;
+  cursor: pointer;
 }
