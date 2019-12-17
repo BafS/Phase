@@ -27,8 +27,9 @@ const Player: React.FC<{
   options: Size;
 }> = ({ buffer, options: { width, height } = { width: 800, height: 350 } }): JSX.Element => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [isLoop, setIsLoop] = useState<boolean>(false);
 
-  useEffect((): (() => void) => {
+  useEffect((): () => void => {
     const audioCtx = new AudioContext();
     let source: AudioBufferSourceNode | undefined;
 
@@ -43,7 +44,8 @@ const Player: React.FC<{
       // connect the AudioBufferSourceNode to the destination to hear the sound
       source.connect(audioCtx.destination);
 
-      source.loop = true;
+      source.loop = isLoop;
+      source.onended = (): void => setIsPlaying(false);
       source.start();
     } else {
       source?.stop();
@@ -52,7 +54,7 @@ const Player: React.FC<{
     return (): void => source?.stop();
   }, [isPlaying]);
 
-  useKeyboardShortcut(['Control', 'S'], useCallback((): void => {
+  useKeyboardShortcut(['Control', 'L'], useCallback((): void => {
     setIsPlaying((prevPlaying): boolean => !prevPlaying);
   }, [setIsPlaying]));
 
@@ -63,9 +65,15 @@ const Player: React.FC<{
         <span className="text-dark text-sm">Length: {buffer.duration}s | </span>
         <span className="text-dark text-sm">Frequency: {buffer.sampleRate}hz | </span>
         <Button className="btn btn-sm" handleClick={(): void => {
+          setIsLoop(false);
           setIsPlaying((p): boolean => !p);
         }}>{isPlaying ? 'stop' : 'play'}</Button>
-        <span className="text-dark text-sm"> (Ctrl+S) | </span>
+        <span> </span>
+        <Button className="btn btn-sm" handleClick={(): void => {
+          setIsLoop(true);
+          setIsPlaying((p): boolean => !p);
+        }}>{isPlaying ? 'stop' : 'loop'}</Button>
+        <span className="text-dark text-sm"> (Ctrl+L) | </span>
         <Button className="btn btn-sm" handleClick={(): void => {
           audioBufferToWaveBlob(buffer).then((a): void => saveFile(a, 'phase-generated.wav'));
         }}>download</Button>
