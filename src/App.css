@@ -36,9 +36,8 @@
   padding-top: 110px;
 }
 
-.main-plot > .placeholder > span {
-  display: block;
-  padding-top: 50px;
+.main-plot > .placeholder > .main {
+  padding-bottom: 30px;
 }
 
 .main-panel {
@@ -103,7 +102,7 @@
   border: none;
   margin-bottom: 6px;
   /* float: right; */
-  font-size: .8rem;
+  font-size: .78rem;
   padding: .45rem 1.5rem;
   background: var(--input-bg-color);
   color: var(--input-fg-color);
@@ -113,7 +112,7 @@
 
 .btn-sm {
   margin: 0;
-  font-size: .8rem;
+  font-size: .78rem;
   padding: .25rem 1.5rem;
 }
 

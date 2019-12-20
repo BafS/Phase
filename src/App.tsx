@@ -15,9 +15,22 @@ import { useDebounce, useKeyboardShortcut } from './hooks';
 
 const Placeholder: React.FC = (): JSX.Element => (
   <div className="text-dark placeholder">
-    Generates a sound whose amplitude is given by <em>F(t)</em> with time <em>t</em> (in ms) from
-    <em> 0</em> to <em>t<sub>max</sub></em>
-    <span className="text-sm">(click on "process" to generate and plot the audio)</span>
+    <p className="main">
+      Generates a sound whose amplitude is given by <em>F(t)</em> with time <em>t</em> (in ms) from
+      <em> 0</em> to <em>t<sub>max</sub></em>
+    </p>
+
+    <p className="text-sm">
+      "process code" button (ctrl+1) will evaluate the whole code
+    </p>
+
+    <p className="text-sm">
+      "process line" (ctrl+2) will evaluate the code until the cursor line
+    </p>
+
+    <p className="text-sm">
+      ("return" is added automatically to the last line if there is none)
+    </p>
   </div>
 );
 
@@ -126,7 +139,7 @@ const App: React.FC = (): JSX.Element => {
         <div className="right">
           <Button handleClick={handleProcess}>process code</Button>
           <span className="text-dark text-sm"> (Ctrl+1)</span><br/>
-          <span className="text-dark text-sm">process line: (Ctrl+2)</span>
+          <span className="text-dark text-sm">process current line (Ctrl+2)</span>
         </div>
       </div>
 
