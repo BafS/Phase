@@ -6,8 +6,9 @@ import { Size } from '../types';
 import { audioBufferToWaveBlob } from '../audio';
 
 const saveFile = (blob: Blob, filename: string): void => {
-  if (window.navigator.msSaveOrOpenBlob) {
-    window.navigator.msSaveOrOpenBlob(blob, filename);
+  const navigator = (window.navigator as any);
+  if (navigator.msSaveOrOpenBlob) {
+    navigator.msSaveOrOpenBlob(blob, filename);
   } else {
     const a = document.createElement('a');
     document.body.appendChild(a);
@@ -47,12 +48,12 @@ const Player: React.FC<{
       source.loop = isLoop;
       source.onended = (): void => setIsPlaying(false);
       source.start();
-    } else {
-      source?.stop();
+    } else if (source) {
+      source.stop();
     }
 
     return (): void => source?.stop();
-  }, [isPlaying]);
+  }, [isPlaying, buffer, isLoop]);
 
   useKeyboardShortcut(['Control', 'L'], useCallback((): void => {
     setIsPlaying((prevPlaying): boolean => !prevPlaying);

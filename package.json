@@ -1,6 +1,6 @@
 {
   "name": "phase",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "PHASE",
   "main": "audio.js",
   "scripts": {
@@ -20,24 +20,24 @@
   "homepage": "https://github.com/BafS/Phase#readme",
   "dependencies": {
     "@types/jest": "^24.0.24",
-    "@types/node": "^12.12.21",
-    "@types/react": "^16.9.17",
-    "@types/react-dom": "^16.9.4",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-monaco-editor": "^0.25.1",
+    "@types/node": "^20.5.7",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-monaco-editor": "^0.26.0",
     "react-scripts": "^3.3.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^1.13.0",
-    "@typescript-eslint/parser": "^1.13.0",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
     "eslint": "^6.7.2",
-    "eslint-config-airbnb-base": "^13.2.0",
-    "eslint-plugin-import": "^2.19.1",
-    "monaco-editor-webpack-plugin": "^1.7.0",
-    "react-app-rewired": "^2.1.5",
-    "typescript": "^3.7.3",
-    "worker-loader": "^2.0.0"
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.28.1",
+    "monaco-editor-webpack-plugin": "^6.0.0",
+    "react-app-rewired": "^2.2.0",
+    "typescript": "^5.2.2",
+    "worker-loader": "^3.0.8"
   },
   "browserslist": {
     "production": [
