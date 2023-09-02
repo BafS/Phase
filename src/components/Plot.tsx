@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from "react";
-import { plotAudioBuffer } from "../canvas";
-import { Size } from "../types";
+import React, { useEffect, useRef } from 'react';
+import { plotAudioBuffer } from '../canvas';
+import { Size } from '../types';
 
 const Plot: React.FC<{
   buffer: AudioBuffer;
