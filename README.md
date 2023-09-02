@@ -20,5 +20,5 @@ sum(n => Math.sin(2 * a * n * Math.PI * t) * .7 / n, [1, 3])
 
 `npm i` to install the dependencies
 
- - `npm start` to dev and run a local server
- - `npm run build` to build in `build/`
+ - `npm run dev` to dev and run a local server
+ - `npm run build` to build for production

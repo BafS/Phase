@@ -1,4 +1,4 @@
-import WaveWorker from './waveWorker.js';
+import WaveWorker from './waveWorker.js?worker';
 
 /**
  * Process javascript code to audio buffer
@@ -35,14 +35,14 @@ function process(input: string, period: number = 100): AudioBuffer {
 
 async function audioBufferToWaveBlob(audioBuffer: AudioBuffer): Promise<Blob> {
   return new Promise<Blob>((resolve: (blob: Blob) => void): void => {
-    const worker: any = new WaveWorker();
+    const worker = new WaveWorker();
 
-    worker.onmessage = (e: any): void => {
+    worker.onmessage = (e: {data: {buffer: ArrayBuffer}}): void => {
       const blob = new Blob([e.data.buffer], { type: 'audio/wav' });
       resolve(blob);
     };
 
-    const pcmArrays = [];
+    const pcmArrays: Float32Array[] = [];
     for (let i = 0; i < audioBuffer.numberOfChannels; ++i) {
       pcmArrays.push(audioBuffer.getChannelData(i));
     }
