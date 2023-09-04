@@ -13,6 +13,7 @@ module.exports = {
     'max-len': ['error', { 'code': 140 }],
     quotes: ['error', 'single'],
     '@typescript-eslint/ban-types': 0,
+    'react-hooks/exhaustive-deps': 0,
     '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/ban-ts-comment': 0,
     'react-refresh/only-export-components': [
