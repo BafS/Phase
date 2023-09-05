@@ -3,6 +3,9 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-bitwise */
 
+/**
+ * @param {{sampleRate: number, bitDepth: number}} config
+ */
 const WavePCM = function (config = {}) {
   this.sampleRate = config.sampleRate || 48000;
   this.bitDepth = config.bitDepth || 16;
@@ -10,12 +13,18 @@ const WavePCM = function (config = {}) {
   this.bytesPerSample = this.bitDepth / 8;
 };
 
+/**
+ * @param {MessageEvent} e
+ */
 self.onmessage = function (e) {
   const wavPCM = new WavePCM(e.data.config);
   wavPCM.record(e.data.pcmArrays);
   wavPCM.requestData();
 };
 
+/**
+ * @param {number[][]} buffers
+ */
 WavePCM.prototype.record = function (buffers = [[]]) {
   this.numberOfChannels = this.numberOfChannels || buffers.length;
   const bufferLength = buffers[0].length;
