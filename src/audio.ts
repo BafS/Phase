@@ -1,4 +1,4 @@
-import WaveWorker from './waveWorker.js?worker';
+import WaveWorker from './waveWorker?worker';
 
 /**
  * Process javascript code to audio buffer
